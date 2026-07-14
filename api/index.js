@@ -29,14 +29,6 @@ app.use(
   }),
 );
 
-app.use("/api/auth", AuthRoute);
-app.use("/api/user", UserRoute);
-app.use("/api/category", CategoryRoute);
-app.use("/api/blog", BlogRoute);
-app.use("/api/comment", CommentRoute);
-app.use("/api/like", LikeRoute);
-app.use("/uploads", express.static(path.resolve(__dirname, "uploads")));
-
 // Cache the MongoDB connection for serverless (Vercel)
 let isConnected = false;
 const connectDB = async () => {
@@ -50,7 +42,19 @@ const connectDB = async () => {
   }
 };
 
-connectDB();
+// Database connection middleware for Vercel Serverless
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
+app.use("/api/auth", AuthRoute);
+app.use("/api/user", UserRoute);
+app.use("/api/category", CategoryRoute);
+app.use("/api/blog", BlogRoute);
+app.use("/api/comment", CommentRoute);
+app.use("/api/like", LikeRoute);
+app.use("/uploads", express.static(path.resolve(__dirname, "uploads")));
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
