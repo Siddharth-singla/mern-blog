@@ -37,14 +37,26 @@ app.use("/api/comment", CommentRoute);
 app.use("/api/like", LikeRoute);
 app.use("/uploads", express.static(path.resolve(__dirname, "uploads")));
 
-mongoose
-  .connect(process.env.MONGODB_CONN, { dbName: "mern-blog" })
-  .then(() => console.log("Database Connected."))
-  .catch((err) => console.log("Database connection failed.", err));
+// Cache the MongoDB connection for serverless (Vercel)
+let isConnected = false;
+const connectDB = async () => {
+  if (isConnected) return;
+  try {
+    await mongoose.connect(process.env.MONGODB_CONN, { dbName: "mern-blog" });
+    isConnected = true;
+    console.log("Database Connected.");
+  } catch (err) {
+    console.log("Database connection failed.", err);
+  }
+};
 
-app.listen(PORT, () => {
-  console.log("Server running on port: ", PORT);
-});
+connectDB();
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log("Server running on port: ", PORT);
+  });
+}
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
