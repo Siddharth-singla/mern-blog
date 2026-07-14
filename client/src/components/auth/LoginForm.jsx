@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/user/user.slice";
 
 const signInSchema = z.object({
-  email: z.email("Please enter a valid email."),
+  email: z.string().email("Please enter a valid email."),
   password: z.string().min(8, "Password must be at least 8 characters."),
 });
 
