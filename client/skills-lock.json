@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "ckeditor": {
+      "source": "ckeditor/skills",
+      "sourceType": "github",
+      "skillPath": "skills/ckeditor/SKILL.md",
+      "computedHash": "06124ab002da4d2a5b33cff7fb2ff64924e386da5eb478a386b44693dd357681"
+    }
+  }
+}
