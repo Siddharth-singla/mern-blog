@@ -50,6 +50,7 @@ const Topbar = () => {
         showToast("error", data.message);
         return;
       }
+      localStorage.removeItem("access_token");
       dispatch(removeUser());
       navigate(RouteIndex);
       showToast("success", data.message);

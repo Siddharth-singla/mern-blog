@@ -52,6 +52,7 @@ export default function LoginForm() {
         showToast("error", data.message);
         return;
       }
+      localStorage.setItem("access_token", data.token);
       dispatch(setUser(data.user));
       navigate(RouteIndex);
       showToast("success", data.message);
@@ -81,6 +82,7 @@ export default function LoginForm() {
         showToast("error", data.message);
         return;
       }
+      localStorage.setItem("access_token", data.token);
       dispatch(setUser(data.user));
       navigate(RouteIndex);
       showToast("success", data.message);
