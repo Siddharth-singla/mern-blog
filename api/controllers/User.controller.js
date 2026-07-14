@@ -34,21 +34,15 @@ export const updateUser = async (req, res, next) => {
       user.password = hashedPassword;
     }
     if (req.file) {
-      let uploadResult = null
-      try {
-        uploadResult = await cloudinary.uploader.upload(
-          req.file.path,
-          { folder: 'mern-blog', resource_type: 'auto' },
-        )
-      } catch (error) {
-        // Cloudinary is unavailable, fallback to local upload path.
-      }
-
+      const dataUri = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+      const uploadResult = await cloudinary.uploader
+        .upload(dataUri, { folder: "mern-blog", resource_type: "auto" })
+        .catch((error) => {
+          return next(handleError(500, error.message));
+        });
+      
       if (uploadResult) {
-        user.avatar = uploadResult.secure_url
-      } else {
-        const baseUrl = `${req.protocol}://${req.get('host')}`
-        user.avatar = `${baseUrl}/uploads/${path.basename(req.file.path)}`
+        user.avatar = uploadResult.secure_url;
       }
     }
 
