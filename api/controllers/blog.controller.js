@@ -8,8 +8,9 @@ export const addBlog = async (req, res, next) => {
     const data = JSON.parse(req.body.data);
     let featuredImage = "";
     if (req.file) {
+      const dataUri = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
       const uploadResult = await cloudinary.uploader
-        .upload(req.file.path, { folder: "mern-blog", resource_type: "auto" })
+        .upload(dataUri, { folder: "mern-blog", resource_type: "auto" })
         .catch((error) => {
           return next(handleError(500, error.message));
         });
@@ -82,8 +83,9 @@ export const updateBlog = async (req, res, next) => {
     blog.blogContent = data.blogContent;
     let featuredImage = blog.featuredImage; 
     if (req.file) {
+      const dataUri = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
       const uploadResult = await cloudinary.uploader
-        .upload(req.file.path, { folder: "mern-blog", resource_type: "auto" })
+        .upload(dataUri, { folder: "mern-blog", resource_type: "auto" })
         .catch((error) => {
           return next(handleError(500, error.message));
         });
